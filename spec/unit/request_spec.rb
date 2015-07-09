@@ -168,22 +168,6 @@ describe RestClient::Request, :include_helpers do
     end
   end
 
-  it "uses netrc credentials" do
-    URI.stub(:parse).and_return(double('uri', :user => nil, :password => nil, :hostname => 'example.com'))
-    Netrc.stub(:read).and_return('example.com' => ['a', 'b'])
-    @request.parse_url_with_auth('http://example.com/resource')
-    @request.user.should eq 'a'
-    @request.password.should eq 'b'
-  end
-
-  it "uses credentials in the url in preference to netrc" do
-    URI.stub(:parse).and_return(double('uri', :user => 'joe%20', :password => 'pass1', :hostname => 'example.com'))
-    Netrc.stub(:read).and_return('example.com' => ['a', 'b'])
-    @request.parse_url_with_auth('http://joe%20:pass1@example.com/resource')
-    @request.user.should eq 'joe '
-    @request.password.should eq 'pass1'
-  end
-
   it "determines the Net::HTTP class to instantiate by the method name" do
     @request.net_http_request_class(:put).should eq Net::HTTP::Put
   end

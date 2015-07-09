@@ -1,7 +1,6 @@
 require 'tempfile'
 require 'mime/types'
 require 'cgi'
-require 'netrc'
 require 'set'
 
 module RestClient
@@ -352,9 +351,6 @@ module RestClient
       uri = parse_url(url)
       @user = CGI.unescape(uri.user) if uri.user
       @password = CGI.unescape(uri.password) if uri.password
-      if !@user && !@password
-        @user, @password = Netrc.read[uri.hostname]
-      end
       uri
     end
 
